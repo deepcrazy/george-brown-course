@@ -1,14 +1,14 @@
 import * as mdc from 'material-components-web';
 
-const textFieldElements = document.querySelectorAll( '.mdc-text-field')
-for (let textFieldElement of textFieldElements ) {
-  const textField = new mdc.textField.MDCTextFieldd(textFieldElement);
+const textFieldElements = document.querySelectorAll('.mdc-text-field')
+for (let textFieldElement of textFieldElements) {
+  const textField = new mdc.textField.MDCTextField(textFieldElement);
 }
 
 const submitButtonElement = document.getElementById('submit-button'); submitButtonElement.addEventListener('click', onClickSubmit)
 
 function onClickSubmit() {
-  const {elements } = submitButtonElement.form
+  const { elements } = submitButtonElement.form
   const data = new Map()
 
   for (let element of elements) {
@@ -26,13 +26,14 @@ function onClickSubmit() {
 
     if (element.type === 'checkbox') {
       data.set(element.id, element.checked);
-        continue
+      continue
     }
 
     if (element.type === 'text') {
       if (element.value === '') {
         const section = element.closest('.Container_Section');
         showError(section)
+        removeErrorOnTextInput(section, element);
         return
       }
       data.set(element.id, element.value)
@@ -44,8 +45,9 @@ function onClickSubmit() {
 
   if (!data.get('diet-restrictions')) {
     const element = document.querySelector('[name="diet-restrictions"]')
-  const section = element.closest('.Container_Section')
+    const section = element.closest('.Container_Section')
     showError(section);
+    removeErrorOnRadioChange(section, element);
     return;
   }
 
@@ -71,16 +73,16 @@ function showError(section) {
 }
 
 function removeErrorOnTextInput(section, element) {
-  element.addEventListener('input', ( )=> removeError(section))
+  element.addEventListener('input', () => removeError(section))
 }
 
 function removeErrorOnRadioChange(section, element) {
   const radioElements = section.querySelectorAll('input[type=radio]')
   for (let radioElement of radioElements) {
-    radioElement.addEventListener('change', ( )=> removeError(section))
+    radioElement.addEventListener('change', () => removeError(section))
   }
 }
 
 function removeError(section) {
-    section.classList.remove('Container_Section__Error')
+  section.classList.remove('Container_Section__Error')
 }
