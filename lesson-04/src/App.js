@@ -1,5 +1,6 @@
 import React from 'react'
 import './App.css'
+import ErrorMessage from './ErrorMessage'
 
 function useCustomHook() {
   const [value, setValue] = React.useState('')
@@ -11,6 +12,10 @@ function useCustomHook() {
 }
 
 function InputField({ inputClassName, type, placeholder, labelText, value, onChange }) {
+  // const [isFocussed, setIsFocussed] = React.useState(false);
+  const inputFieldValue = { value }
+  if (inputFieldValue.value == "")
+    var error = ErrorMessage({ label: "Please enter " + labelText });
   return (
     <label className='FormField-Label'>
       <span className='FormField-LabelText'>{labelText}</span>
@@ -21,6 +26,8 @@ function InputField({ inputClassName, type, placeholder, labelText, value, onCha
         value={value}
         onChange={onChange}
       />
+
+      {error}
     </label>
   )
 }
@@ -56,6 +63,31 @@ export default function App() {
   const onClickSubmit = () => {
     console.log('Clicked submit button!')
   }
+
+  function disableSubmitButtonFn() {
+    if (firstNameState.value == "" || lastNameState.value == "" || !diet) {
+      return true
+    }
+  }
+
+  const [state, setState] = React.useState(navigator.online)
+
+  React.useEffect(() => {
+    const onlineFn = () => {
+      setState(true)
+    }
+    const offlineFn = () => {
+      setState(false)
+    }
+    window.addEventListener('online', onlineFn)
+
+    window.addEventListener('offline', offlineFn)
+
+    return () => {
+      window.removeEventListener('online', onlineFn)
+      window.removeEventListener('offline', offlineFn)
+    }
+  }, [])
 
   return (
     <div className='App'>
@@ -135,9 +167,10 @@ export default function App() {
             labelText='None'
           />
         </div>
+        {state ? "Online" : "Offline"}
 
         <div className='FormSubmit'>
-          <button className='FormSubmit-Button' onClick={onClickSubmit}>
+          <button className='FormSubmit-Button' onClick={onClickSubmit} disabled={disableSubmitButtonFn()}>
             Register
           </button>
         </div>
