@@ -64,13 +64,7 @@ export default function App() {
     console.log('Clicked submit button!')
   }
 
-  function disableSubmitButtonFn() {
-    if (firstNameState.value == "" || lastNameState.value == "" || !diet) {
-      return true
-    }
-  }
-
-  const [state, setState] = React.useState(navigator.online)
+  const [state, setState] = React.useState(navigator.onLine)
 
   React.useEffect(() => {
     const onlineFn = () => {
@@ -88,6 +82,19 @@ export default function App() {
       window.removeEventListener('offline', offlineFn)
     }
   }, [])
+
+  function disableSubmitButtonFn() {
+    if (firstNameState.value == "" || lastNameState.value == "" || !diet || !state) {
+      return true
+    }
+  }
+
+  // React.useEffect(() => {
+  //   const timer = setTimeout(() => {
+  //     console.log('This will run after 5 second!')
+  //   }, 5000);
+  //   return () => clearTimeout(timer);
+  // }, []);
 
   return (
     <div className='App'>
