@@ -1,65 +1,40 @@
 import './App.css'
 import React from 'react'
 
-// function RadioField({ type, name, value, checked, onChange, labelText }) {
-//   return (
-//     <label className='FormField-Label FormField-Label__Radio'>
-//       <span className='FormField-LabelText FormField-LabelText__Radio'>
-//         <input
-//           className='FormField-Input FormField-Input__Radio'
-//           type={type}
-//           name={name}
-//           value={value}
-//           checked={checked}
-//           onChange={onChange}
-//         />
-//         {labelText}
-//       </span>
-//     </label>
-//   )
-// }
-
 export default function App() {
 
-  // const [foodValue, setFoodValue] = React.useState(null)
-  // const onChangeFoodValue = event => setFoodValue(event.target.value)
+  const [isNarrow, setIsNarrow] = React.useState(window.innerWidth < 600);
 
-  // const [poolValue, setPoolValue] = React.useState(null)
-  // const onChangePoolValue = event => setPoolValue(event.target.value)
+  React.useEffect(() => {
 
-  // const [avgValue, setAvgValue] = React.useState('')
+    const onResize = () => {
+      if (!isNarrow && window.innerWidth < 600){
+        setIsNarrow(true)
+      } else if (isNarrow && window.innerWidth > 600) {
+        setIsNarrow(false)
+      }
+    }
+    window.addEventListener('resize', onResize)
 
-  // React.useEffect(() => {
-  //   const displayAvgValueFn = () => {
-  //     const valuesArray = []
-  //     valuesArray.push(foodValue)
-  //     valuesArray.push(poolValue)
-  //     const average = (valuesArray) => valuesArray.reduce((a, b) => a + b) / valuesArray.length;
-  //     setAvgValue(average(valuesArray))
-  //     console.log(average);
-  //   }
-  //   // window.onload(displayAvgValueFn())
-  //   window.addEventListener('onload', displayAvgValueFn)
-  // }, [])
+    return () => {
+      window.removeEventListener('resize', onResize)
+    }
+  }, [isNarrow])
 
-  // const displayAvgValueFn = event => {
-  //   const valuesArray = []
-  //   valuesArray.push(foodValue)
-  //   valuesArray.push(poolValue)
-  //   const average = (valuesArray) => valuesArray.reduce((a, b) => a + b) / valuesArray.length;
-  //   setAvgValue(average(valuesArray))
-  //   console.log(average)
-  // }
-  // window.addEventListener('onChange', displayAvgValueFn)
   return (
     <div className='App'>
       <div className='App-Content'>
         <h1 className='App-Title'>Feedback Form</h1>
 
-        <h3 className='App-SubTitle'>Give a rating based on your experience</h3>
-        <Exercise1 />
+        {!isNarrow && (
+          <div>
+          <h3 className='App-SubTitle' id="ratingSection">Give a rating based on your experience</h3>
+          <Exercise1 />
+          </div>
+        )
+     }
 
-        <h3 className='App-SubTitle'>
+        <h3 className='App-SubTitle' id="checkboxSection">
           Select all options based on your experience
         </h3>
         <Exercise2 />
@@ -100,6 +75,21 @@ function Exercise1() {
   })
   // console.log(newArray)
   const avgValue = newArray.length !== 0 ? newArray.reduce((a, b) => a + b) / newArray.length : ""
+
+  // var [displaySection, setDisplaySection] = React.useEffect(null)
+  
+  // React.useEffect(() => {
+    
+  //   const setDisplaySectionFn = () => {
+  //     if (window.innerWidth <= 600)
+  //       var section = document.getElementById("checkboxSection").hide();
+  //     setDisplaySection(
+  //       displaySection = section
+  //     )
+  //   }
+
+  //   window.addEventListener('resize', setDisplaySectionFn)
+  // }, [])
 
   return (
     <div>
